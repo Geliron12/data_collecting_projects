@@ -7,7 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/1fqIenYT6Oj1ZhJmqQSLF8uBBaeFv-_Vh
 """
 
-from bs4 import BeautifulSoup as bs
+import re
+from bs4 import BeautifulSoup as bs 
 import requests
 from docx import Document as docxdoc
 from docx.shared import Inches
@@ -15,7 +16,6 @@ from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from spire.doc import *
 from spire.doc.common import *
 from PyPDF2 import PdfReader
-import re
 
 def extract_links_from_text(text):
   url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
@@ -24,17 +24,17 @@ def extract_links_from_text(text):
 """Получение ссылок"""
 
 def get_links_url(url):
-  result = requests.get(url)
-  page = result.text
-  doc = bs(page)
-  links = [element.get('href') for element in doc.find_all('a')]
-  return links
+    result = requests.get(url)
+    page = result.text
+    doc = bs(page)
+    links = [element.get('href') for element in doc.find_all('a')]
+    return links
 
 def get_text_url(url):
-  result = requests.get(url)
-  page = result.text
-  doc = bs(page)
-  return doc
+    result = requests.get(url)
+    page = result.text
+    doc = bs(page)
+    return doc
 
 """Получение ссылок docx"""
 
@@ -71,23 +71,23 @@ def get_links_doc(file_path):
 """Получение ссылок pdf"""
 
 def get_links_pdf(file_path):
-  ans = []
-  with open(file_path, 'rb') as book:
-      book_reader = PdfReader(book)
-      page_list = book_reader.pages
-      for i in range(len(page_list)):
-        story_page = page_list[i]
-        page_text = story_page.extract_text()
-        url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
-        ans += re.findall(url_extract_pattern, str(page_text))
-  return ans
+    ans = []
+    with open(file_path, 'rb') as book:
+        book_reader = PdfReader(book)
+        page_list = book_reader.pages
+        for i in range(len(page_list)):
+            story_page = page_list[i]
+            page_text = story_page.extract_text()
+            url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
+            ans += re.findall(url_extract_pattern, str(page_text))
+    return ans
 
 def get_text_pdf(file_path):
-  ans = ''
-  with open(file_path, 'rb') as book:
-      book_reader = PdfReader(book)
-      page_list = book_reader.pages
-      for i in range(len(page_list)):
-        story_page = page_list[i]
-        ans += story_page.extract_text()
-  return ans
+    ans = ''
+    with open(file_path, 'rb') as book:
+        book_reader = PdfReader(book)
+        page_list = book_reader.pages
+        for i in range(len(page_list)):
+            story_page = page_list[i]
+            ans += story_page.extract_text()
+    return ans
