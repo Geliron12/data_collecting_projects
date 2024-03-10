@@ -13,8 +13,8 @@ import requests
 from docx import Document as docxdoc
 from docx.shared import Inches
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
-from spire.doc import *
-from spire.doc.common import *
+# from spire.doc import *
+# from spire.doc.common import *
 from PyPDF2 import PdfReader
 
 def extract_links_from_text(text):

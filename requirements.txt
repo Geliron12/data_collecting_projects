@@ -1,0 +1,6 @@
+requests==2.31.0
+PyPDF2==3.0.1
+spire==0.4.2
+docx==0.2.4
+beautifulsoup4==4.12.3
+pytest==8.1.1
