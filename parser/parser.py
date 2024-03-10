@@ -14,7 +14,7 @@ def extract_links_from_text(text):
   return re.findall(url_extract_pattern, text)
 
 def correct_url(url, found_link):
-    if (found_link is None):
+    if (found_link is None or len(found_link) == 0):
         return None
     if (found_link[0] == '/'):
         return url + found_link
