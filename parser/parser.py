@@ -13,8 +13,6 @@ def extract_links_from_text(text):
   url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
   return re.findall(url_extract_pattern, text)
 
-"""Получение ссылок"""
-
 def get_links_url(url):
     """Извлекает ссыкли из html кода веб-страницы по ее ссылке
     с помощью библиотеки beautifulsoup4"""
