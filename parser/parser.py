@@ -15,7 +15,8 @@ def extract_links_from_text(text):
 
 def get_links_url(url):
     """Извлекает ссыкли из html кода веб-страницы по ее ссылке
-    с помощью библиотеки beautifulsoup4"""
+    с помощью библиотеки beautifulsoup4
+    """
     result = requests.get(url)
     page = result.text
     doc = bs(page)
@@ -24,7 +25,8 @@ def get_links_url(url):
 
 def get_text_url(url):
     """Извлекает html код веб-страницы по ее ссылке
-    с помощью библиотеки beautifulsoup4"""
+    с помощью библиотеки beautifulsoup4
+    """
     result = requests.get(url)
     page = result.text
     doc = bs(page)
