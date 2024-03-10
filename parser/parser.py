@@ -13,6 +13,15 @@ def extract_links_from_text(text):
   url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
   return re.findall(url_extract_pattern, text)
 
+def correct_url(url, found_link):
+    if (found_link is None):
+        return None
+    if (found_link[0] == '/'):
+        return url + found_link
+    if (len(found_link) < len('https') or found_link[:len('https')] != 'https'):
+        return None
+    return found_link
+
 def get_links_url(url):
     """Извлекает ссыкли из html кода веб-страницы по ее ссылке
     с помощью библиотеки beautifulsoup4
@@ -20,8 +29,8 @@ def get_links_url(url):
     result = requests.get(url)
     page = result.text
     doc = bs(page)
-    links = [element.get('href') for element in doc.find_all('a')]
-    return links
+    links = [correct_url(url, element.get('href')) for element in doc.find_all('a')]
+    return list(filter(None, links))
 
 def get_text_url(url):
     """Извлекает html код веб-страницы по ее ссылке
