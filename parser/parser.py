@@ -4,8 +4,8 @@ import requests
 from docx import Document as docxdoc
 from docx.shared import Inches
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
-from spire.doc import *
-from spire.doc.common import *
+# from spire.doc import *
+# from spire.doc.common import *
 from PyPDF2 import PdfReader
 
 def extract_links_from_text(text):
@@ -63,25 +63,25 @@ def get_text_docx(file_path):
         fullText.append(para.text)
     return '\n'.join(fullText)
 
-# def get_text_doc(file_path):
-#     """Получение текста файла с расширением .doc,
-#     для этого файл конвертируется с расширением docx,
-#     с помощью библиотеки Spire.Doc,
-#     далее используется функция get_text_docx
-#     """
-#     document = Document()
-#     document.LoadFromFile('/content/ex.doc')
-#     document.SaveToFile('/content/TEMP.docx', FileFormat.Docx2016)
-#     document.Close()
-#     return get_text_docx('/content/TEMP.docx')[len('Evaluation Warning: The document was created with Spire.Doc for Python.\n'):]
+def get_text_doc(file_path):
+    """Получение текста файла с расширением .doc,
+    для этого файл конвертируется с расширением docx,
+    с помощью библиотеки Spire.Doc,
+    далее используется функция get_text_docx
+    """
+    document = Document()
+    document.LoadFromFile('/content/ex.doc')
+    document.SaveToFile('/content/TEMP.docx', FileFormat.Docx2016)
+    document.Close()
+    return get_text_docx('/content/TEMP.docx')[len('Evaluation Warning: The document was created with Spire.Doc for Python.\n'):]
 
-# def get_links_doc(file_path):
-#     """Получение ссылок файла с расширением .doc,
-#     для этого получается текст файла с помощью get_text_doc,
-#     далее используется функция extract_links_from_text для
-#     извелечения ссылок из текста
-#     """
-#     return extract_links_from_text(get_text_doc(file_path))
+def get_links_doc(file_path):
+    """Получение ссылок файла с расширением .doc,
+    для этого получается текст файла с помощью get_text_doc,
+    далее используется функция extract_links_from_text для
+    извелечения ссылок из текста
+    """
+    return extract_links_from_text(get_text_doc(file_path))
 
 def get_links_pdf(file_path):
     """Получение ссылок файла с расширением pdf

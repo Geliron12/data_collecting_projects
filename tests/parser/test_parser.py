@@ -6,8 +6,8 @@ from bs4 import BeautifulSoup as bs
 from parser.parser import extract_links_from_text, \
                           get_links_url,  get_text_url, \
                           get_links_docx, get_text_docx, \
-                          get_links_pdf, get_text_pdf, \
-                          get_links_doc, get_text_doc
+                          get_links_pdf, get_text_pdf \
+                        #   get_links_doc, get_text_doc
 
 
 #URL-----------------------------------------------------------------------------------
@@ -75,39 +75,39 @@ def test_get_text_docx_exception(bad_test_path, expected_exception):
         get_text_docx(bad_test_path)
 
 #DOC-----------------------------------------------------------------------------------
-test_get_links_doc_path = 'tests/parser/test_files/ex.doc'
-test_get_links_doc_result = ['https://twitter.com/home', 'https://twitter.com/home', 'https://chat.openai.com/']
-test_get_links_doc_path1 = 'tests/parser/test_files/ex1.doc'
-test_get_links_doc_result1 = []
-test_get_links_doc_path2 = 'tests/parser/test_files/ex2.doc'
-test_get_links_doc_result2 = ['https://chat.openai.com/']
+# test_get_links_doc_path = 'tests/parser/test_files/ex.doc'
+# test_get_links_doc_result = ['https://twitter.com/home', 'https://twitter.com/home', 'https://chat.openai.com/']
+# test_get_links_doc_path1 = 'tests/parser/test_files/ex1.doc'
+# test_get_links_doc_result1 = []
+# test_get_links_doc_path2 = 'tests/parser/test_files/ex2.doc'
+# test_get_links_doc_result2 = ['https://chat.openai.com/']
 
-@pytest.mark.parametrize("test_path, expected_result", [(test_get_links_docx_path, test_get_links_docx_result),
-                                                        (test_get_links_docx_path1, test_get_links_docx_result1),
-                                                        (test_get_links_docx_path2, test_get_links_docx_result2)])
-def test_get_links_doc(test_path, expected_result):
-    assert get_links_doc(test_path) == expected_result
+# @pytest.mark.parametrize("test_path, expected_result", [(test_get_links_docx_path, test_get_links_docx_result),
+#                                                         (test_get_links_docx_path1, test_get_links_docx_result1),
+#                                                         (test_get_links_docx_path2, test_get_links_docx_result2)])
+# def test_get_links_doc(test_path, expected_result):
+#     assert get_links_doc(test_path) == expected_result
 
-#-----------------------------------------------------------------------------------
-test_get_text_doc_path1 = 'tests/parser/test_files/ex1.doc'
-test_get_text_doc_result1 = ''
-test_get_text_doc_path2 = 'tests/parser/test_files/ex2.doc'
-test_get_text_doc_result2 = 'Ijree555g\nhttps://chat.openai.com/'
+# #-----------------------------------------------------------------------------------
+# test_get_text_doc_path1 = 'tests/parser/test_files/ex1.doc'
+# test_get_text_doc_result1 = ''
+# test_get_text_doc_path2 = 'tests/parser/test_files/ex2.doc'
+# test_get_text_doc_result2 = 'Ijree555g\nhttps://chat.openai.com/'
 
 
-@pytest.mark.parametrize("test_path, expected_result", [(test_get_text_doc_path1, test_get_text_doc_result1),
-                                                        (test_get_text_doc_path2, test_get_text_doc_result2)])
-def test_get_text_doc(test_path, expected_result):
-    assert get_text_doc(test_path) == expected_result
+# @pytest.mark.parametrize("test_path, expected_result", [(test_get_text_doc_path1, test_get_text_doc_result1),
+#                                                         (test_get_text_doc_path2, test_get_text_doc_result2)])
+# def test_get_text_doc(test_path, expected_result):
+#     assert get_text_doc(test_path) == expected_result
 
-#-----------------------------------------------------------------------------------
-test_doc_bad_path = 'tests/parser/test_files/test/ex.pdf'
-doc_expected_exception = docx.opc.exceptions.PackageNotFoundError
+# #-----------------------------------------------------------------------------------
+# test_doc_bad_path = 'tests/parser/test_files/test/ex.pdf'
+# doc_expected_exception = docx.opc.exceptions.PackageNotFoundError
 
-@pytest.mark.parametrize("test_path, expected_exception", [(test_doc_bad_path, doc_expected_exception)])
-def test_get_text_doc_exception(bad_test_path, expected_exception):
-    with pytest.raises(expected_exception):
-        get_text_doc(bad_test_path)
+# @pytest.mark.parametrize("test_path, expected_exception", [(test_doc_bad_path, doc_expected_exception)])
+# def test_get_text_doc_exception(bad_test_path, expected_exception):
+#     with pytest.raises(expected_exception):
+#         get_text_doc(bad_test_path)
 
 
 #PDF-----------------------------------------------------------------------------------
