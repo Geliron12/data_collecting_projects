@@ -7,11 +7,18 @@ from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from spire.doc import *
 from spire.doc.common import *
 from PyPDF2 import PdfReader
+import subprocess
 
 def extract_links_from_text(text):
-  """Вспомогательная функция для извлечения ссылок из строкового значения"""
-  url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
-  return re.findall(url_extract_pattern, text)
+    """Вспомогательная функция для извлечения ссылок из строкового значения"""
+    url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
+    return re.findall(url_extract_pattern, text)
+
+def clean_spaces_at_the_end(s):
+    lines = s.splitlines()
+    cleaned_lines = [line.rstrip() for line in lines]
+    result = '\n'.join(cleaned_lines)
+    return result
 
 def correct_url(url, found_link):
     if (found_link is None or len(found_link) == 0):
@@ -109,4 +116,11 @@ def get_text_pdf(file_path):
         for i in range(len(page_list)):
             story_page = page_list[i]
             ans += story_page.extract_text()
-    return ans
+    return clean_spaces_at_the_end(ans)
+
+def get_text_djvu(file_path):
+    result = subprocess.run(["djvutxt", file_path], capture_output=True, text=True)
+    return clean_spaces_at_the_end(result.stdout)
+
+def get_links_djvu(file_path):
+    return extract_links_from_text(get_text_djvu(file_path))
