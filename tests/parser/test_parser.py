@@ -6,7 +6,8 @@ from bs4 import BeautifulSoup as bs
 from parser.parser import extract_links_from_text, \
                           get_links_url,  get_text_url, \
                           get_links_docx, get_text_docx, \
-                          get_links_pdf, get_text_pdf \
+                          get_links_pdf, get_text_pdf, \
+                          get_links_djvu, get_text_djvu
                         #   get_links_doc, get_text_doc
 
 
@@ -41,16 +42,33 @@ def test_get_text_url(test_url, expected_result):
     assert get_text_url(test_url) == expected_result
 
 #DOCX-----------------------------------------------------------------------------------
-test_get_links_docx_path = 'tests/parser/test_files/ex.docx'
-test_get_links_docx_result = ['https://twitter.com/home', 'https://twitter.com/home', 'https://chat.openai.com/']
-test_get_links_docx_path1 = 'tests/parser/test_files/ex1.docx'
-test_get_links_docx_result1 = []
-test_get_links_docx_path2 = 'tests/parser/test_files/ex2.docx'
-test_get_links_docx_result2 = ['https://chat.openai.com/']
+test_get_links_docx_path1 = 'tests/parser/test_files/empty.docx'
+test_get_links_docx_path2 = 'tests/parser/test_files/eng_with_spaces_and_urls.docx'
+test_get_links_docx_path3 = 'tests/parser/test_files/eng_with_urls.docx'
+test_get_links_docx_path4 = 'tests/parser/test_files/just_image.docx'
+test_get_links_docx_path5 = 'tests/parser/test_files/rus_and_eng.docx'
+test_get_links_docx_path6 = 'tests/parser/test_files/rus.docx'
+test_get_links_docx_path7 = 'tests/parser/test_files/space_at_the_end.docx'
+test_get_links_docx_path8 = 'tests/parser/test_files/symbols.docx'
+test_get_links_docx_path9 = 'tests/parser/test_files/with_image.docx'
+test_get_links_docx_path10 = 'tests/parser/test_files/with_text_image.docx'
 
-@pytest.mark.parametrize("test_path, expected_result", [(test_get_links_docx_path, test_get_links_docx_result),
-                                                        (test_get_links_docx_path1, test_get_links_docx_result1),
-                                                        (test_get_links_docx_path2, test_get_links_docx_result2)])
+
+test_get_links_docx_result1 = []
+test_get_links_docx_result2 = ['https://chat.openai.com/']
+test_get_links_docx_result3 = ['https://chat.openai.com/']
+test_get_links_docx_result4 = []
+test_get_links_docx_result5 = []
+test_get_links_docx_result6 = []
+test_get_links_docx_result7 = []
+test_get_links_docx_result8 = []
+test_get_links_docx_result9 = []
+test_get_links_docx_result10 = []
+
+
+@pytest.mark.parametrize("test_path, expected_result", [(test_get_links_docx_path1, test_get_links_docx_result1),
+                                                        (test_get_links_docx_path2, test_get_links_docx_result2),
+                                                        (test_get_links_docx_path3, test_get_links_docx_result3)])
 def test_get_links_docx(test_path, expected_result):
     assert get_links_docx(test_path) == expected_result
 
@@ -59,9 +77,12 @@ test_get_text_docx_path1 = 'tests/parser/test_files/ex1.docx'
 test_get_text_docx_result1 = ''
 test_get_text_docx_path2 = 'tests/parser/test_files/ex2.docx'
 test_get_text_docx_result2 = 'Ijree555g\nhttps://chat.openai.com/'
+test_get_text_docx_path3 = 'tests/parser/test_files/ex2.docx'
+test_get_text_docx_result3 = 'Мама мыла раму ??'
 
 @pytest.mark.parametrize("test_path, expected_result", [(test_get_text_docx_path1, test_get_text_docx_result1),
-                                                        (test_get_text_docx_path2, test_get_text_docx_result2)])
+                                                        (test_get_text_docx_path2, test_get_text_docx_result2),
+                                                        ((test_get_text_docx_path3, test_get_text_docx_result3))])
 def test_get_text_docx(test_path, expected_result):
     assert get_text_docx(test_path) == expected_result
 
@@ -126,11 +147,14 @@ def test_get_links_pdf(test_url, expected_result):
 
 #-----------------------------------------------------------------------------------
 test_get_text_pdf_path1 = 'tests/parser/test_files/ex1.pdf'
-test_get_text_pdf_result1 = ' '
+test_get_text_pdf_result1 = ''
 test_get_text_pdf_path2 = 'tests/parser/test_files/ex2.pdf'
 test_get_text_pdf_result2 = 'Ijree555g https://chat.openai.com/ '
+test_get_text_pdf_path3 = 'tests/parser/test_files/ex2.docx'
+test_get_text_pdf_result3 = 'Мама мыла раму ??'
 
 @pytest.mark.parametrize("test_url, expected_result", [(test_get_text_pdf_path1, test_get_text_pdf_result1),
-                                                       (test_get_text_pdf_path2, test_get_text_pdf_result2)])
+                                                       (test_get_text_pdf_path2, test_get_text_pdf_result2),
+                                                       (test_get_text_pdf_path3, test_get_text_pdf_result3)])
 def test_get_text_pdf(test_url, expected_result):
     assert get_text_pdf(test_url) == expected_result
