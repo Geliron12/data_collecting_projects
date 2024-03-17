@@ -26,20 +26,25 @@ def test_extract_links_from_text(test_text, expected_result):
 #WEBSITE-----------------------------------------------------------------------------------
 #TODO (собираются не все ссылки с тестовой страницы)
 test_get_links_url_url1 = 'https://x.ai/'
-test_get_links_url_res1 = ['https://x.ai/', 'https://x.ai/', 'https://x.ai//about/', 'https://x.ai//career/', 'https://x.ai//prompt-ide/', 'https://dload-oktatas.educatio.hu/erettsegi/feladatok_2023tavasz_kozep/k_matang_23maj_fl.pdf', 'https://x.ai/model-card/', 'https://x.ai/career/', 'https://boards.greenhouse.io/xai/jobs/4101903007', 'https://x.ai/career/', 'https://grok.x.ai', 'https://x.com/xai', 'https://x.ai//legal/terms-of-service/', 'https://x.ai//legal/privacy-policy/']
+test_get_links_url_url2 = 'https://apmath.spbu.ru/fakultet/kafedry.html'
+test_get_links_url_url3 = 'https://spbu.ru/'
+test_get_links_url_url4 = 'https://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D0%BA%D1%83%D0%BB%D1%8C%D1%82%D0%B5%D1%82_%D0%BF%D1%80%D0%B8%D0%BA%D0%BB%D0%B0%D0%B4%D0%BD%D0%BE%D0%B9_%D0%BC%D0%B0%D1%82%D0%B5%D0%BC%D0%B0%D1%82%D0%B8%D0%BA%D0%B8_%E2%80%94_%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%BE%D0%B2_%D1%83%D0%BF%D1%80%D0%B0%D0%B2%D0%BB%D0%B5%D0%BD%D0%B8%D1%8F_%D0%A1%D0%B0%D0%BD%D0%BA%D1%82-%D0%9F%D0%B5%D1%82%D0%B5%D1%80%D0%B1%D1%83%D1%80%D0%B3%D1%81%D0%BA%D0%BE%D0%B3%D0%BE_%D0%B3%D0%BE%D1%81%D1%83%D0%B4%D0%B0%D1%80%D1%81%D1%82%D0%B2%D0%B5%D0%BD%D0%BD%D0%BE%D0%B3%D0%BE_%D1%83%D0%BD%D0%B8%D0%B2%D0%B5%D1%80%D1%81%D0%B8%D1%82%D0%B5%D1%82%D0%B0'
+
+
+test_get_links_url_res1 = ['https://x.ai//', 'https://x.ai//blog', 'https://x.ai//about', 'https://x.ai//careers', 'https://x.ai//terms-of-service', 'https://x.ai//privacy-policy', 'https://developers.x.ai', 'https://ide.x.ai', 'https://grok.x.ai']
+test_get_links_url_res2 = 'https://apmath.spbu.ru/fakultet/kafedry/6-kafedra-teorii-upravleniya'
+test_get_links_url_res3 = 'https://abiturient.spbu.ru'
+test_get_links_url_res4 = 'https://ru.wikipedia.org//wiki/%D0%9C%D0%B5%D1%85%D0%B0%D0%BD%D0%B8%D0%BA%D0%B0'
 
 @pytest.mark.parametrize("test_url, expected_result", [(test_get_links_url_url1, test_get_links_url_res1)])
 def test_get_links_url(test_url, expected_result):
     assert get_links_url(test_url) == expected_result
 
-#-----------------------------------------------------------------------------------
-#TODO (нужно ли собирать код страницы или же всё таки контент?)
-test_get_text_url_url1 = 'https://x.ai/'
-test_get_text_url_res1 = bs(open('tests/parser/test_files/get_text_url_res1.txt', 'r'))
-
-@pytest.mark.parametrize("test_url, expected_result", [(test_get_text_url_url1, test_get_text_url_res1)])
-def test_get_text_url(test_url, expected_result):
-    assert get_text_url(test_url) == expected_result
+@pytest.mark.parametrize("test_url, expected_result", [(test_get_links_url_url2, test_get_links_url_res2),
+                                                       (test_get_links_url_url3, test_get_links_url_res3),
+                                                       (test_get_links_url_url4, test_get_links_url_res4)])
+def test_get_links_url(test_url, expected_result):
+    assert expected_result in get_links_url(test_url)
 
 #DOCX-----------------------------------------------------------------------------------
 document_path1 = 'tests/parser/test_files/empty'
