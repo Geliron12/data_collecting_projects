@@ -4,8 +4,8 @@ import requests
 from docx import Document as docxdoc
 from docx.shared import Inches
 from docx.opc.constants import RELATIONSHIP_TYPE as RT
-# from spire.doc import *
-# from spire.doc.common import *
+from spire.doc import *
+from spire.doc.common import *
 from PyPDF2 import PdfReader
 import subprocess
 
@@ -68,7 +68,7 @@ def get_text_docx(file_path):
     fullText = []
     for para in doc.paragraphs:
         fullText.append(para.text)
-    return '\n'.join(fullText)
+    return clean_spaces_at_the_end('\n'.join(fullText))
 
 def get_text_doc(file_path):
     """Получение текста файла с расширением .doc,
