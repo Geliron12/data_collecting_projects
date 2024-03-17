@@ -12,7 +12,7 @@ import subprocess
 def extract_links_from_text(text):
     """Вспомогательная функция для извлечения ссылок из строкового значения"""
     url_extract_pattern = "https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
-    return re.findall(url_extract_pattern, text)
+    return re.findall(url_extract_pattern, text + ' ')
 
 def clean_spaces_at_the_end(s):
     lines = s.splitlines()
