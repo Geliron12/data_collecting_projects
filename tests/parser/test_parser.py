@@ -7,8 +7,8 @@ from parser.parser import extract_links_from_text, \
                           get_links_url,  get_text_url, \
                           get_links_docx, get_text_docx, \
                           get_links_pdf, get_text_pdf, \
-                          get_links_djvu, get_text_djvu
-                        #   get_links_doc, get_text_doc
+                          get_links_djvu, get_text_djvu, \
+                          get_links_doc, get_text_doc
 
 
 #URL-----------------------------------------------------------------------------------
@@ -42,21 +42,21 @@ def test_get_text_url(test_url, expected_result):
     assert get_text_url(test_url) == expected_result
 
 #DOCX-----------------------------------------------------------------------------------
-test_get_links_docx_path1 = 'tests/parser/test_files/empty.docx'
-test_get_links_docx_path2 = 'tests/parser/test_files/eng_with_spaces_and_urls.docx'
-test_get_links_docx_path3 = 'tests/parser/test_files/eng_with_urls.docx'
-test_get_links_docx_path4 = 'tests/parser/test_files/just_image.docx'
-test_get_links_docx_path5 = 'tests/parser/test_files/rus_and_eng.docx'
-test_get_links_docx_path6 = 'tests/parser/test_files/rus.docx'
-test_get_links_docx_path7 = 'tests/parser/test_files/space_at_the_end.docx'
-test_get_links_docx_path8 = 'tests/parser/test_files/symbols.docx'
-test_get_links_docx_path9 = 'tests/parser/test_files/with_image.docx'
-test_get_links_docx_path10 = 'tests/parser/test_files/with_text_image.docx'
+document_path1 = 'tests/parser/test_files/empty'
+document_path2 = 'tests/parser/test_files/eng_with_spaces_and_urls'
+document_path3 = 'tests/parser/test_files/eng_with_urls'
+document_path4 = 'tests/parser/test_files/just_image'
+document_path5 = 'tests/parser/test_files/rus'
+document_path6 = 'tests/parser/test_files/rus_and_eng'
+document_path7 = 'tests/parser/test_files/space_at_the_end'
+document_path8 = 'tests/parser/test_files/symbols'
+document_path9 = 'tests/parser/test_files/with_image'
+document_path10 = 'tests/parser/test_files/with_text_image'
 
 
 test_get_links_docx_result1 = []
 test_get_links_docx_result2 = ['https://chat.openai.com/']
-test_get_links_docx_result3 = ['https://chat.openai.com/']
+test_get_links_docx_result3 = ['https://chat.openai.com/', 'https://twitter.com/home']
 test_get_links_docx_result4 = []
 test_get_links_docx_result5 = []
 test_get_links_docx_result6 = []
@@ -66,28 +66,49 @@ test_get_links_docx_result9 = []
 test_get_links_docx_result10 = []
 
 
-@pytest.mark.parametrize("test_path, expected_result", [(test_get_links_docx_path1, test_get_links_docx_result1),
-                                                        (test_get_links_docx_path2, test_get_links_docx_result2),
-                                                        (test_get_links_docx_path3, test_get_links_docx_result3)])
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.docx', test_get_links_docx_result1),
+                                                        (document_path2 + '.docx', test_get_links_docx_result2),
+                                                        (document_path3 + '.docx', test_get_links_docx_result3),
+                                                        (document_path4 + '.docx', test_get_links_docx_result4),
+                                                        (document_path5 + '.docx', test_get_links_docx_result5),
+                                                        (document_path6 + '.docx', test_get_links_docx_result6),
+                                                        (document_path7 + '.docx', test_get_links_docx_result7),
+                                                        (document_path8 + '.docx', test_get_links_docx_result8),
+                                                        (document_path9 + '.docx', test_get_links_docx_result9),
+                                                        (document_path10 + '.docx', test_get_links_docx_result10)]
+                                                        )
+                                                        
 def test_get_links_docx(test_path, expected_result):
     assert get_links_docx(test_path) == expected_result
 
 #-----------------------------------------------------------------------------------
-test_get_text_docx_path1 = 'tests/parser/test_files/ex1.docx'
 test_get_text_docx_result1 = ''
-test_get_text_docx_path2 = 'tests/parser/test_files/ex2.docx'
-test_get_text_docx_result2 = 'Ijree555g\nhttps://chat.openai.com/'
-test_get_text_docx_path3 = 'tests/parser/test_files/ex2.docx'
-test_get_text_docx_result3 = 'Мама мыла раму ??'
+test_get_text_docx_result2 = 'Ijree555g\n\nhttps://chat.openai.com/'
+test_get_text_docx_result3 = 'Ijree555g https://chat.openai.com/ https://twitter.com/home'
+test_get_text_docx_result4 = ''
+test_get_text_docx_result5 = 'Мама мыла раму'
+test_get_text_docx_result6 = 'Мама мыла раму ?? Who I am'
+test_get_text_docx_result7 = 'Hello world!'
+test_get_text_docx_result8 = '$%✊✋₽①✔✕'
+test_get_text_docx_result9 = 'Python\n\nPython'
+test_get_text_docx_result10 = 'Unicode\n\nUnicode'
 
-@pytest.mark.parametrize("test_path, expected_result", [(test_get_text_docx_path1, test_get_text_docx_result1),
-                                                        (test_get_text_docx_path2, test_get_text_docx_result2),
-                                                        ((test_get_text_docx_path3, test_get_text_docx_result3))])
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.docx', test_get_text_docx_result1),
+                                                        (document_path2 + '.docx', test_get_text_docx_result2),
+                                                        (document_path3 + '.docx', test_get_text_docx_result3),
+                                                        (document_path4 + '.docx', test_get_text_docx_result4),
+                                                        (document_path5 + '.docx', test_get_text_docx_result5),
+                                                        (document_path6 + '.docx', test_get_text_docx_result6),
+                                                        (document_path7 + '.docx', test_get_text_docx_result7),
+                                                        (document_path8 + '.docx', test_get_text_docx_result8),
+                                                        (document_path9 + '.docx', test_get_text_docx_result9),
+                                                        (document_path10 + '.docx', test_get_text_docx_result10)]
+                                                        )
 def test_get_text_docx(test_path, expected_result):
     assert get_text_docx(test_path) == expected_result
 
 #-----------------------------------------------------------------------------------
-test_docx_bad_path = 'tests/parser/test_files/test/ex.pdf'
+test_docx_bad_path = document_path1 + '.pdf'
 docx_expected_exception = docx.opc.exceptions.PackageNotFoundError
 
 @pytest.mark.parametrize("bad_test_path, expected_exception", [(test_docx_bad_path, docx_expected_exception)])
@@ -95,66 +116,171 @@ def test_get_text_docx_exception(bad_test_path, expected_exception):
     with pytest.raises(expected_exception):
         get_text_docx(bad_test_path)
 
+
 #DOC-----------------------------------------------------------------------------------
-# test_get_links_doc_path = 'tests/parser/test_files/ex.doc'
-# test_get_links_doc_result = ['https://twitter.com/home', 'https://twitter.com/home', 'https://chat.openai.com/']
-# test_get_links_doc_path1 = 'tests/parser/test_files/ex1.doc'
-# test_get_links_doc_result1 = []
-# test_get_links_doc_path2 = 'tests/parser/test_files/ex2.doc'
-# test_get_links_doc_result2 = ['https://chat.openai.com/']
+test_get_links_doc_result1 = []
+test_get_links_doc_result2 = ['https://chat.openai.com/']
+test_get_links_doc_result3 = ['https://chat.openai.com/', 'https://twitter.com/home']
+test_get_links_doc_result4 = []
+test_get_links_doc_result5 = []
+test_get_links_doc_result6 = []
+test_get_links_doc_result7 = []
+test_get_links_doc_result8 = []
+test_get_links_doc_result9 = []
+test_get_links_doc_result10 = []
 
-# @pytest.mark.parametrize("test_path, expected_result", [(test_get_links_docx_path, test_get_links_docx_result),
-#                                                         (test_get_links_docx_path1, test_get_links_docx_result1),
-#                                                         (test_get_links_docx_path2, test_get_links_docx_result2)])
-# def test_get_links_doc(test_path, expected_result):
-#     assert get_links_doc(test_path) == expected_result
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.doc', test_get_links_doc_result1),
+                                                        (document_path2 + '.doc', test_get_links_doc_result2),
+                                                        (document_path3 + '.doc', test_get_links_doc_result3),
+                                                        (document_path4 + '.doc', test_get_links_doc_result4),
+                                                        (document_path5 + '.doc', test_get_links_doc_result5),
+                                                        (document_path6 + '.doc', test_get_links_doc_result6),
+                                                        (document_path7 + '.doc', test_get_links_doc_result7),
+                                                        (document_path8 + '.doc', test_get_links_doc_result8),
+                                                        (document_path9 + '.doc', test_get_links_doc_result9),
+                                                        (document_path10 + '.doc', test_get_links_doc_result10)]
+                                                        )
+def test_get_links_doc(test_path, expected_result):
+    assert get_links_doc(test_path) == expected_result
 
-# #-----------------------------------------------------------------------------------
-# test_get_text_doc_path1 = 'tests/parser/test_files/ex1.doc'
-# test_get_text_doc_result1 = ''
-# test_get_text_doc_path2 = 'tests/parser/test_files/ex2.doc'
-# test_get_text_doc_result2 = 'Ijree555g\nhttps://chat.openai.com/'
+#-----------------------------------------------------------------------------------
+test_get_text_doc_result1 = ''
+test_get_text_doc_result2 = 'Ijree555g\n\nhttps://chat.openai.com/'
+test_get_text_doc_result3 = 'Ijree555g https://chat.openai.com/ https://twitter.com/home'
+test_get_text_doc_result4 = ''
+test_get_text_doc_result5 = 'Мама мыла раму'
+test_get_text_doc_result6 = 'Мама мыла раму ?? Who I am'
+test_get_text_doc_result7 = 'Hello world!'
+test_get_text_doc_result8 = '$%✊✋₽①✔✕'
+test_get_text_doc_result9 = 'Python\n\nPython'
+test_get_text_doc_result10 = 'Unicode\n\nUnicode'
 
 
-# @pytest.mark.parametrize("test_path, expected_result", [(test_get_text_doc_path1, test_get_text_doc_result1),
-#                                                         (test_get_text_doc_path2, test_get_text_doc_result2)])
-# def test_get_text_doc(test_path, expected_result):
-#     assert get_text_doc(test_path) == expected_result
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.doc', test_get_text_doc_result1),
+                                                        (document_path2 + '.doc', test_get_text_doc_result2),
+                                                        (document_path3 + '.doc', test_get_text_doc_result3),
+                                                        (document_path4 + '.doc', test_get_text_doc_result4),
+                                                        (document_path5 + '.doc', test_get_text_doc_result5),
+                                                        (document_path6 + '.doc', test_get_text_doc_result6),
+                                                        (document_path7 + '.doc', test_get_text_doc_result7),
+                                                        (document_path8 + '.doc', test_get_text_doc_result8),
+                                                        (document_path9 + '.doc', test_get_text_doc_result9),
+                                                        (document_path10 + '.doc', test_get_text_doc_result10)]
+                                                        )
+def test_get_text_doc(test_path, expected_result):
+    assert get_text_doc(test_path) == expected_result
 
-# #-----------------------------------------------------------------------------------
-# test_doc_bad_path = 'tests/parser/test_files/test/ex.pdf'
-# doc_expected_exception = docx.opc.exceptions.PackageNotFoundError
+#-----------------------------------------------------------------------------------
+test_doc_bad_path = document_path1 + '.pdf'
+doc_expected_exception = docx.opc.exceptions.PackageNotFoundError
 
-# @pytest.mark.parametrize("test_path, expected_exception", [(test_doc_bad_path, doc_expected_exception)])
-# def test_get_text_doc_exception(bad_test_path, expected_exception):
-#     with pytest.raises(expected_exception):
-#         get_text_doc(bad_test_path)
+@pytest.mark.parametrize("test_path, expected_exception", [(test_doc_bad_path, doc_expected_exception)])
+def test_get_text_doc_exception(bad_test_path, expected_exception):
+    with pytest.raises(expected_exception):
+        get_text_doc(bad_test_path)
 
 
 #PDF-----------------------------------------------------------------------------------
-test_get_links_pdf_url = 'tests/parser/test_files/ex.pdf'
-test_get_links_pdf_res = ['https://chat.openai.com/', 'https://twitter.com/home', 'https://twitter.com/home']
-test_get_links_pdf_url1 = 'tests/parser/test_files/ex1.pdf'
-test_get_links_pdf_res1 = []
-test_get_links_pdf_url2 = 'tests/parser/test_files/ex2.pdf'
-test_get_links_pdf_res2 = ['https://chat.openai.com/']
+test_get_links_pdf_result1 = []
+test_get_links_pdf_result2 = ['https://chat.openai.com/']
+test_get_links_pdf_result3 = ['https://chat.openai.com/', 'https://twitter.com/home']
+test_get_links_pdf_result4 = []
+test_get_links_pdf_result5 = []
+test_get_links_pdf_result6 = []
+test_get_links_pdf_result7 = []
+test_get_links_pdf_result8 = []
+test_get_links_pdf_result9 = []
+test_get_links_pdf_result10 = []
 
-@pytest.mark.parametrize("test_url, expected_result", [(test_get_links_pdf_url, test_get_links_pdf_res),
-                                                       (test_get_links_pdf_url1, test_get_links_pdf_res1),
-                                                       (test_get_links_pdf_url2, test_get_links_pdf_res2)])
-def test_get_links_pdf(test_url, expected_result):
-    assert get_links_pdf(test_url) == expected_result
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.pdf', test_get_links_pdf_result1),
+                                                        (document_path2 + '.pdf', test_get_links_pdf_result2),
+                                                        (document_path3 + '.pdf', test_get_links_pdf_result3),
+                                                        (document_path4 + '.pdf', test_get_links_pdf_result4),
+                                                        (document_path5 + '.pdf', test_get_links_pdf_result5),
+                                                        (document_path6 + '.pdf', test_get_links_pdf_result6),
+                                                        (document_path7 + '.pdf', test_get_links_pdf_result7),
+                                                        (document_path8 + '.pdf', test_get_links_pdf_result8),
+                                                        (document_path9 + '.pdf', test_get_links_pdf_result9),
+                                                        (document_path10 + '.pdf', test_get_links_pdf_result10)]
+                                                        )
+def test_get_links_pdf(test_path, expected_result):
+    assert get_links_pdf(test_path) == expected_result
 
 #-----------------------------------------------------------------------------------
-test_get_text_pdf_path1 = 'tests/parser/test_files/ex1.pdf'
 test_get_text_pdf_result1 = ''
-test_get_text_pdf_path2 = 'tests/parser/test_files/ex2.pdf'
-test_get_text_pdf_result2 = 'Ijree555g https://chat.openai.com/ '
-test_get_text_pdf_path3 = 'tests/parser/test_files/ex2.docx'
-test_get_text_pdf_result3 = 'Мама мыла раму ??'
+test_get_text_pdf_result2 = 'Ijree555g\n\nhttps://chat.openai.com/'
+test_get_text_pdf_result3 = 'Ijree555g https://chat.openai.com/ https://twitter.com/home'
+test_get_text_pdf_result4 = ''
+test_get_text_pdf_result5 = 'Мама мыла раму'
+test_get_text_pdf_result6 = 'Мама мыла раму ?? Who I am'
+test_get_text_pdf_result7 = 'Hello world!'
+test_get_text_pdf_result8 = '$%✊✋₽①✔✕'
+test_get_text_pdf_result9 = 'Python\n\nPython'
+test_get_text_pdf_result10 = 'Unicode\n\nUnicode'
 
-@pytest.mark.parametrize("test_url, expected_result", [(test_get_text_pdf_path1, test_get_text_pdf_result1),
-                                                       (test_get_text_pdf_path2, test_get_text_pdf_result2),
-                                                       (test_get_text_pdf_path3, test_get_text_pdf_result3)])
-def test_get_text_pdf(test_url, expected_result):
-    assert get_text_pdf(test_url) == expected_result
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.pdf', test_get_text_pdf_result1),
+                                                        (document_path2 + '.pdf', test_get_text_pdf_result2),
+                                                        (document_path3 + '.pdf', test_get_text_pdf_result3),
+                                                        (document_path4 + '.pdf', test_get_text_pdf_result4),
+                                                        (document_path5 + '.pdf', test_get_text_pdf_result5),
+                                                        (document_path6 + '.pdf', test_get_text_pdf_result6),
+                                                        (document_path7 + '.pdf', test_get_text_pdf_result7),
+                                                        (document_path8 + '.pdf', test_get_text_pdf_result8),
+                                                        (document_path9 + '.pdf', test_get_text_pdf_result9),
+                                                        (document_path10 + '.pdf', test_get_text_pdf_result10)]
+                                                        )
+def test_get_text_pdf(test_path, expected_result):
+    assert get_text_pdf(test_path) == expected_result
+
+
+#DJVU-----------------------------------------------------------------------------------
+test_get_links_djvu_result1 = []
+test_get_links_djvu_result2 = ['https://chat.openai.com/']
+test_get_links_djvu_result3 = ['https://chat.openai.com/', 'https://twitter.com/home']
+test_get_links_djvu_result4 = []
+test_get_links_djvu_result5 = []
+test_get_links_djvu_result6 = []
+test_get_links_djvu_result7 = []
+test_get_links_djvu_result8 = []
+test_get_links_djvu_result9 = []
+test_get_links_djvu_result10 = []
+
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.djvu', test_get_links_djvu_result1),
+                                                        (document_path2 + '.djvu', test_get_links_djvu_result2),
+                                                        (document_path3 + '.djvu', test_get_links_djvu_result3),
+                                                        (document_path4 + '.djvu', test_get_links_djvu_result4),
+                                                        (document_path5 + '.djvu', test_get_links_djvu_result5),
+                                                        (document_path6 + '.djvu', test_get_links_djvu_result6),
+                                                        (document_path7 + '.djvu', test_get_links_djvu_result7),
+                                                        (document_path8 + '.djvu', test_get_links_djvu_result8),
+                                                        (document_path9 + '.djvu', test_get_links_djvu_result9),
+                                                        (document_path10 + '.djvu', test_get_links_djvu_result10)]
+                                                        )
+def test_get_links_djvu(test_path, expected_result):
+    assert get_links_djvu(test_path) == expected_result
+
+#-----------------------------------------------------------------------------------
+test_get_text_djvu_result1 = ''
+test_get_text_djvu_result2 = 'Ijree555g\n\nhttps://chat.openai.com/'
+test_get_text_djvu_result3 = 'Ijree555g https://chat.openai.com/ https://twitter.com/home'
+test_get_text_djvu_result4 = ''
+test_get_text_djvu_result5 = 'Мама мыла раму'
+test_get_text_djvu_result6 = 'Мама мыла раму ?? Who I am'
+test_get_text_djvu_result7 = 'Hello world!'
+test_get_text_djvu_result8 = '$%✊✋₽①✔✕'
+test_get_text_djvu_result9 = 'Python\n\nPython'
+test_get_text_djvu_result10 = 'Unicode\n\nUnicode'
+
+@pytest.mark.parametrize("test_path, expected_result", [(document_path1 + '.djvu', test_get_text_djvu_result1),
+                                                        (document_path2 + '.djvu', test_get_text_djvu_result2),
+                                                        (document_path3 + '.djvu', test_get_text_djvu_result3),
+                                                        (document_path4 + '.djvu', test_get_text_djvu_result4),
+                                                        (document_path5 + '.djvu', test_get_text_djvu_result5),
+                                                        (document_path6 + '.djvu', test_get_text_djvu_result6),
+                                                        (document_path7 + '.djvu', test_get_text_djvu_result7),
+                                                        (document_path8 + '.djvu', test_get_text_djvu_result8),
+                                                        (document_path9 + '.djvu', test_get_text_djvu_result9),
+                                                        (document_path10 + '.djvu', test_get_text_djvu_result10)]
+                                                        )
+def test_get_text_djvu(test_path, expected_result):
+    assert get_text_djvu(test_path) == expected_result
