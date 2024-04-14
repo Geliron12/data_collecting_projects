@@ -4,6 +4,7 @@ import random
 import pandas as pd
 import matplotlib.pyplot as plt
 from datetime import datetime
+import seaborn as sns
 
 class VkParser:
     '''
@@ -25,9 +26,9 @@ class VkParser:
         Общая функция для парсинга всех постов по запросу query за неделю,
         возвращает статистику по итогам парсинга
         '''
+        self.query = query
         while self.end_time > self.start_time:
             result = self.request_per_hour(query, self.end_time - 3600, self.end_time)
-            print (self.end_time - 3600, self.end_time)
             new_df = self.get_info(result)
             self.data = pd.concat([self.data, new_df])
             self.end_time -= 3600
@@ -63,11 +64,9 @@ class VkParser:
             new_dict['likes'].append(record['likes']['count'])
             new_dict['reposts'].append(record['reposts']['count'])
             new_dict['comments'].append(record['comments']['count'])
-            new_dict['user_id'].append(-1 * record['from_id'])
+            new_dict['user_id'].append(abs(record['from_id']))
             new_dict['views'].append(record.get('views', {'count': 0})['count'])
             new_dict['date'].append(datetime.fromtimestamp(record['date']).strftime('%Y-%m-%d'))
-        for key in new_dict:
-            print(len(new_dict[key]))
         return pd.DataFrame(new_dict)
 
     def print_info(self):
@@ -87,6 +86,16 @@ class VkParser:
 
     def plot_stats(self):
         '''
-        TODO: функция для построения графика
+        Функция для построения графиков
         '''
-        pass
+        sns.set_style("darkgrid")
+        fig, ax = plt.subplots(figsize=(10,6))
+        sum_data = self.data.groupby('date').sum()
+        plt.plot(self.data.groupby('date').count()['texts'], '-*', label='Количество постов')
+        plt.plot(sum_data['likes'], '-*', label='Количество лайков')
+        plt.plot(sum_data['reposts'], '-*', label='Количество репостов')
+        plt.plot(sum_data['comments'], '-*', label='Количество комментариев')
+        plt.title(f'Статистика по запросу: {self.query}')
+        plt.legend()
+
+        
