@@ -3,7 +3,7 @@ import os
 import pytest
 from vk_parse import VkParser
 
-temp_user_token = '3ab836a23ab836a23ab836a22b39afc09b33ab83ab836a25ca2a165f6acc297a94b3c3d'
+temp_user_token = "YOUR USER TOKEN"
 
 test_parser_input1 = 'rE9z%KbN&G7qLyDc#TvX2eJ3Pb6ZgH4kC1jWs8L!UQoMfA5hI0'
 test_parser_result1 = []
