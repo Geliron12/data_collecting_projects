@@ -16,7 +16,7 @@ class VkParser:
         '''
         self.USER_TOKEN = USER_TOKEN
         self.end_time = int(time.time())
-        self.start_time = self.end_time - 604800
+        self.start_time = 1704049200
         self.data = pd.DataFrame(columns=['texts', 'likes', 'reposts', 'comments', 'user_id', 'views', 'date'])
         self.sleep_time = [0.2, 0.1, 0.3]
         self.info = dict()
@@ -61,9 +61,9 @@ class VkParser:
         new_dict = {'texts':[], 'likes':[], 'reposts':[], 'comments':[], 'user_id':[], 'views': [], 'date' : []}
         for record in data:
             new_dict['texts'].append(record['text'])
-            new_dict['likes'].append(record['likes']['count'])
-            new_dict['reposts'].append(record['reposts']['count'])
-            new_dict['comments'].append(record['comments']['count'])
+            new_dict['likes'].append(record.get('likes', {'count': 0})['count'])
+            new_dict['reposts'].append(record.get('reposts', {'count': 0})['count'])
+            new_dict['comments'].append(record.get('comments', {'count': 0})['count'])
             new_dict['user_id'].append(abs(record['from_id']))
             new_dict['views'].append(record.get('views', {'count': 0})['count'])
             new_dict['date'].append(datetime.fromtimestamp(record['date']).strftime('%Y-%m-%d'))
@@ -91,6 +91,7 @@ class VkParser:
         sns.set_style("darkgrid")
         fig, ax = plt.subplots(figsize=(10,6))
         sum_data = self.data.groupby('date').sum()
+        plt.locator_params(axis='x', nbins=14)
         plt.plot(self.data.groupby('date').count()['texts'], '-*', label='Количество постов')
         plt.plot(sum_data['likes'], '-*', label='Количество лайков')
         plt.plot(sum_data['reposts'], '-*', label='Количество репостов')
