@@ -32,7 +32,7 @@ class EliasCoding(ABC):
     @abstractmethod
     def elias_gamma_encode(x): 
         """
-        Гамма-кодирование Элиаса 
+        Гамма-кодирование Элиаса для отдельного числа
         """
         if x == 0 or x == 1:  
             return str(x)
@@ -46,7 +46,7 @@ class EliasCoding(ABC):
     @abstractmethod
     def elias_gamma_decode(x): 
         """
-        Гамма-декодирование Элиаса 
+        Гамма-декодирование Элиаса для отдельного числа
         """
         x = list(x) 
         K = 0
@@ -65,7 +65,7 @@ class EliasCoding(ABC):
     @abstractmethod
     def elias_delta_encode(k):
         """
-        Дельта-кодирование Элиаса
+        Дельта-кодирование Элиаса для отдельного числа
         """
         if k == 1:
             return str(k)
@@ -75,6 +75,9 @@ class EliasCoding(ABC):
 
     @abstractmethod
     def elias_delta_decode(x): 
+        """
+        Дельта-декодирование Элиаса для отдельного числа
+        """
         x = list(x) 
         L=0
         while True: 
@@ -90,6 +93,47 @@ class EliasCoding(ABC):
             if x[i]=='1': 
                 n=n+math.pow(2,i) 
         return int(n) 
+
+
+    def decode_gamma_string(encoded_posting_list: str):
+        """
+        Декодирование гамма кода Элиаса для строки, содержащей несколько чисел 
+        """
+        decoded_posting_list = []
+        while encoded_posting_list != '':
+            length = encoded_posting_list.index('1') + 1
+            if length > 1:
+                length = 2*length-1
+                current_encoded_number = encoded_posting_list[:length]
+                encoded_posting_list = encoded_posting_list[length:]
+            else:
+                current_encoded_number = encoded_posting_list[0]
+                encoded_posting_list = encoded_posting_list[1:]
+
+            decoded_posting_list.append(EliasCoding.elias_gamma_decode(current_encoded_number))
+        return decoded_posting_list
+
+
+    def decode_delta_string(encoded_posting_list: str):
+        """
+        Декодирование дельта кода Элиаса для строки, содержащей несколько чисел 
+        """
+        decoded_posting_list = []
+        while encoded_posting_list != '':
+            m = encoded_posting_list.index('1')
+            if m > 0:
+                l_part = encoded_posting_list[m+1:2*m+1]
+                l = 2**m + int(l_part, 2)
+                k = l-1
+                index = 2*m+1 + k
+                current_encoded_number = encoded_posting_list[:index]
+                encoded_posting_list = encoded_posting_list[index:]  
+            else:
+                current_encoded_number = encoded_posting_list[0]
+                encoded_posting_list = encoded_posting_list[1:]                  
+
+            decoded_posting_list.append(EliasCoding.elias_delta_decode(current_encoded_number))
+        return decoded_posting_list
 
 
 

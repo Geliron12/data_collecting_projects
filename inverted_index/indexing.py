@@ -1,12 +1,14 @@
 import pandas as pd
+from typing import List
 from abc import ABC, abstractmethod
+from bitarray import bitarray
 
 from coding import EliasCoding
 
 
 class InvertedIndex(ABC):
     @abstractmethod
-    def create_inverted_index(tokenized_docs: pd.Series, data_path: str) -> dict:
+    def create_inverted_index(tokenized_docs: List, data_path: str) -> dict:
         """
         Построение инвертированного индекса для токенизированного корпуса документов
         """
@@ -22,6 +24,7 @@ class InvertedIndex(ABC):
                     continue
         return inverted_index
 
+
     @abstractmethod
     def compress_inverted_index(inv_index: dict, mode: str):
         """
@@ -35,10 +38,13 @@ class InvertedIndex(ABC):
         """
         if mode == "gamma":
             for term in inv_index.keys():
-                compressed_posting_list = [EliasCoding.elias_gamma_encode(post) for post in inv_index[term]]
+                compressed_posting_list = bitarray("".join([EliasCoding.elias_gamma_encode(post) for post in inv_index[term]]))
                 inv_index[term] = compressed_posting_list
         else: 
             for term in inv_index.keys():
-                compressed_posting_list = [EliasCoding.elias_delta_encode(post) for post in inv_index[term]]
+                compressed_posting_list = bitarray("".join([EliasCoding.elias_delta_encode(post) for post in inv_index[term]]))
                 inv_index[term] = compressed_posting_list
         return inv_index
+
+
+
