@@ -15,6 +15,8 @@ class IRetrieval(ABC):
         tokenized_query = Tokenization.tokenize_text(query)
         or_relevant_indices = set()
         for token in tokenized_query:
+            if token not in inv_index:
+                continue
             match compressed:
                 case "gamma":
                     or_relevant_indices.update(EliasCoding.decode_gamma_string(inv_index[token].to01()))

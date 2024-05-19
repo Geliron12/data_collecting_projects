@@ -1,5 +1,9 @@
 from coding import NumberRepr, EliasCoding
 from preprocessing import Tokenization
+from indexing import InvertedIndex
+from retrieval import IRetrieval
+from utils import load_dataset
+import pandas as pd
 
 #############################Тесты по унарному представлению числа###################################
 def test_unary1():
@@ -138,3 +142,90 @@ def test_tokenization4():
 
 def test_tokenization5():
     assert Tokenization.tokenize_text('ю..бюбюб..б.юбю. дауж') == ['бюбюб', 'юб', 'дауж']
+
+def test_tokenization6():
+    assert Tokenization.tokenize_text('ю11бюбюб1234бюбю456дауж') == ['ю11бюбюб1234бюбю456дауж']
+
+def test_tokenization7():
+    assert Tokenization.tokenize_text('Я дурак 🙂') == ['дурак']  
+#############################Тесты для индексации###################################
+
+def test_indexation1():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    assert indexes['шиш'] == [4]
+
+def test_indexation2():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    assert indexes['человек'] == [1, 2]
+
+def test_indexation3():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    assert indexes['никак'] == [11]
+
+def test_indexation4():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    assert indexes['смысл'] == [4]
+
+def test_indexation5():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    assert indexes.get('аннотация',[]) == []
+
+def test_indexation6():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    assert indexes.get('',[]) == []
+
+#############################Тесты для поиска###################################
+def test_retrieval1():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    relevant = IRetrieval.get_relevant_doc_indices('человек', indexes)
+    assert relevant == {1, 2}
+
+def test_retrieval2():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    relevant = IRetrieval.get_relevant_doc_indices('аннотация', indexes)
+    assert relevant == set()
+
+def test_retrieval3():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    relevant = IRetrieval.get_relevant_doc_indices('печень', indexes)
+    assert relevant == {3}
+
+def test_retrieval4():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    relevant = IRetrieval.get_relevant_doc_indices('понимаю', indexes)
+    assert relevant == {9, 10}
+
+def test_retrieval5():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    relevant = IRetrieval.get_relevant_doc_indices('я', indexes)
+    assert relevant == set()
+
+
+def test_retrieval6():
+    data = load_dataset('test_data.csv')
+    data = Tokenization.tokenize_doc_corpus(data)
+    indexes = InvertedIndex.create_inverted_index(data)
+    relevant = IRetrieval.get_relevant_doc_indices('человек злой', indexes)
+    assert relevant == {1, 2}

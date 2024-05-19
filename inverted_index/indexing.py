@@ -8,7 +8,7 @@ from coding import EliasCoding
 
 class InvertedIndex(ABC):
     @abstractmethod
-    def create_inverted_index(tokenized_docs: List, data_path: str) -> dict:
+    def create_inverted_index(tokenized_docs: List) -> dict:
         """
         Построение инвертированного индекса для токенизированного корпуса документов
         """
